@@ -1,22 +1,30 @@
-import { nanoid } from '@/lib/utils'
-import { Chat } from '@/components/chat'
-import { AI } from '@/lib/chat/actions'
-import { auth } from '@/auth'
-import { Session } from '@/lib/types'
-import { getMissingKeys } from '../actions'
+import { nanoid } from "@/lib/utils";
+import { Chat } from "@/components/chat";
+import { AI } from "@/lib/chat/actions";
+import { getMissingKeys } from "../actions";
+import { createClient } from "@/utils/supabase/server";
 
 export const metadata = {
-  title: 'Next.js AI Chatbot'
-}
+  title: "AI Voice Chatbot",
+};
 
 export default async function IndexPage() {
-  const id = nanoid()
-  const session = (await auth()) as Session
-  const missingKeys = await getMissingKeys()
+  const supabase = createClient();
+  const id = nanoid();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const missingKeys = await getMissingKeys();
 
   return (
     <AI initialAIState={{ chatId: id, messages: [] }}>
-      <Chat id={id} session={session} missingKeys={missingKeys} />
+      <Chat
+        id={id}
+        aiName="default bot"
+        user={user}
+        missingKeys={missingKeys}
+      />
     </AI>
-  )
+  );
 }

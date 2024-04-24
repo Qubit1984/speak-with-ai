@@ -1,60 +1,70 @@
-import { type Metadata } from 'next'
-import { notFound, redirect } from 'next/navigation'
+import { type Metadata } from "next";
+import { notFound, redirect } from "next/navigation";
 
-import { auth } from '@/auth'
-import { getChat, getMissingKeys } from '@/app/actions'
-import { Chat } from '@/components/chat'
-import { AI } from '@/lib/chat/actions'
-import { Session } from '@/lib/types'
+import { getChat, getAiProperty, getMissingKeys } from "@/app/actions";
+import { Chat } from "@/components/chat";
+import { AI } from "@/lib/chat/actions";
+import { createClient } from "@/utils/supabase/server";
 
 export interface ChatPageProps {
   params: {
-    id: string
-  }
+    id: string;
+  };
 }
 
 export async function generateMetadata({
-  params
+  params,
 }: ChatPageProps): Promise<Metadata> {
-  const session = await auth()
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session?.user) {
-    return {}
+  if (!user) {
+    return {};
   }
-
-  const chat = await getChat(params.id, session.user.id)
+  const chat = await getChat(params.id);
+  //console.log("chatidpage chat", params.id, chat);
   return {
-    title: chat?.title.toString().slice(0, 50) ?? 'Chat'
-  }
+    title: chat?.title?.toString().slice(0, 50) ?? "Chat",
+  };
 }
 
 export default async function ChatPage({ params }: ChatPageProps) {
-  const session = (await auth()) as Session
-  const missingKeys = await getMissingKeys()
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session?.user) {
-    redirect(`/login?next=/chat/${params.id}`)
+  const missingKeys = await getMissingKeys();
+
+  if (!user) {
+    redirect(`/login?next=/chat/${params.id}`);
   }
 
-  const userId = session.user.id as string
-  const chat = await getChat(params.id, userId)
+  const chat = await getChat(params.id);
+  const aiParaId = chat.ai_para;
+  const aiName = aiParaId
+    ? await getAiProperty(aiParaId, "name")
+    : "default bot";
 
   if (!chat) {
-    redirect('/')
+    redirect("/");
   }
 
-  if (chat?.userId !== session?.user?.id) {
-    notFound()
+  if (chat?.userId !== user?.id) {
+    redirect("/");
   }
 
   return (
     <AI initialAIState={{ chatId: chat.id, messages: chat.messages }}>
       <Chat
         id={chat.id}
-        session={session}
+        user={user}
+        aiName={aiName}
         initialMessages={chat.messages}
         missingKeys={missingKeys}
       />
     </AI>
-  )
+  );
 }

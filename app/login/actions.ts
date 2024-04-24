@@ -1,23 +1,34 @@
-'use server'
+"use server";
 
-import { signIn } from '@/auth'
-import { User } from '@/lib/types'
-import { AuthError } from 'next-auth'
-import { z } from 'zod'
-import { kv } from '@vercel/kv'
-import { ResultCode } from '@/lib/utils'
+import { ResultCode } from "@/lib/utils";
 
-export async function getUser(email: string) {
-  const user = await kv.hgetall<User>(`user:${email}`)
-  return user
-}
+import { revalidatePath } from "next/cache";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
+import { toast } from "react-hot-toast";
+export const signIn = async (formData: FormData) => {
+  "use server";
 
-interface Result {
-  type: string
-  resultCode: ResultCode
-}
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const supabase = createClient();
 
-export async function authenticate(
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    return error.message;
+    //redirect("/error");
+  }
+  return { message: "You have successfully logged in" };
+  toast.success("You have successfully logged in");
+  revalidatePath("/", "layout");
+  redirect("/");
+};
+
+/* export async function authenticate(
   _prevState: Result | undefined,
   formData: FormData
 ): Promise<Result | undefined> {
@@ -69,3 +80,4 @@ export async function authenticate(
     }
   }
 }
+ */

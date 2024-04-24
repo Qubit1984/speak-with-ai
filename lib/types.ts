@@ -1,37 +1,41 @@
-import { Message } from 'ai'
-
+import { Message } from "ai";
+//import { User } from "@supabase/auth-js/dist/module/lib/types";
 export interface Chat extends Record<string, any> {
-  id: string
-  title: string
-  createdAt: Date
-  userId: string
-  path: string
-  messages: Message[]
-  sharePath?: string
+  id: string;
+  userId: string;
+  title: string;
+  //createdAt: Date;
+  //userId: string;
+  path: string;
+  messages: Message[];
+  //sharePath?: string;
 }
+export interface AiPara {
+  id: string;
+  user_id: string;
+  name: string;
+  prompt: string;
+  temperature: number;
+  max_token: number;
+  listen_language: string;
+  speak_language: string;
+  should_speak: boolean;
+}
+/* export interface AiPara {
+  id: string;
+  user_id: string;
+  name: string;
+  prompt: string;
+  temperature: number;
+  max_token: number;
+  listen_language: string;
+  speak_language: string;
+  should_speak: boolean;
+} */
 
 export type ServerActionResult<Result> = Promise<
   | Result
   | {
-      error: string
+      error: string;
     }
->
-
-export interface Session {
-  user: {
-    id: string
-    email: string
-  }
-}
-
-export interface AuthResult {
-  type: string
-  message: string
-}
-
-export interface User extends Record<string, any> {
-  id: string
-  email: string
-  password: string
-  salt: string
-}
+>;
