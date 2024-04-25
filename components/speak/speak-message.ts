@@ -2,6 +2,7 @@ import AWS from "aws-sdk";
 
 const polly: AWS.Polly = new AWS.Polly({
   region: process.env.NEXT_PUBLIC_REGION || "ap-northeast-1", // 替换为你的AWS区域
+  apiVersion: "latest",
   credentials: {
     accessKeyId: process.env.NEXT_PUBLIC_POLLY_KEY_ID!,
     secretAccessKey: process.env.NEXT_PUBLIC_POLLY_SECRET_KEY!,
