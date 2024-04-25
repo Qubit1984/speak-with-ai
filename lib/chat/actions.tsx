@@ -133,8 +133,9 @@ async function submitUserMessage(content: string, selectedIndex: number) {
 
       return textNode;
     },
-    functions: {
-      /*     listStocks: {
+    /*
+     functions: {
+          listStocks: {
         description: "List three imaginary stocks that are trending.",
         parameters: z.object({
           stocks: z.array(
@@ -321,8 +322,8 @@ async function submitUserMessage(content: string, selectedIndex: number) {
             </BotCard>
           );
         },
-      }, */
-    },
+      }, 
+    },*/
   });
 
   return {
