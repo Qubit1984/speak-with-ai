@@ -40,9 +40,16 @@ export default function Botselect({ AiParas, selectedAiPara }: BotselectProps) {
   const setInitialAistate = useStore((state) => state.setInitialAistate);
   const setSelectedai = useStore((state) => state.setSelectedai);
   const deleteAistate = useStore((state) => state.deleteAistate);
-
+  useEffect(() => {
+    setInitialAistate(AiParas);
+  }, [AiParas]);
+  useEffect(() => {
+    if (selectedAiPara) {
+      setSelectedai(selectedAiPara);
+    }
+  }, [selectedAiPara]);
   const userId = selectedai?.user_id;
-  const GenerateDropdownMenuSub = (aiparas: AiPara[]) => {
+  function GenerateDropdownMenuSub(aiparas: AiPara[]) {
     const handleSelectBot = async (aiPara: AiPara) => {
       try {
         console.log("aiPara.id", aiPara.id);
@@ -57,19 +64,12 @@ export default function Botselect({ AiParas, selectedAiPara }: BotselectProps) {
       } catch (error) {}
       deleteAistate(botId);
     };
-    useEffect(() => {
-      setInitialAistate(AiParas);
-    }, [AiParas]);
-    useEffect(() => {
-      if (selectedAiPara) {
-        setSelectedai(selectedAiPara);
-      }
-    }, [selectedAiPara]);
+
     return aiparas.map((aiPara) => (
       <DropdownMenuSub key={aiPara.id}>
         <DropdownMenuSubTrigger className="h-12">
           {aiPara.id === selectedai.id ? (
-            <CircleCheckBig className="mr-2 h-4 w-4" />
+            <CircleCheckBig className="mr-2 size-4" />
           ) : null}
           <span>{aiPara.name}</span>
         </DropdownMenuSubTrigger>
@@ -97,7 +97,7 @@ export default function Botselect({ AiParas, selectedAiPara }: BotselectProps) {
                 className="h-10 flex justify-center cursor-pointer"
                 onClick={() => handleDelete(aiPara.id)}
               >
-                <Trash2 className="text-red-600 mr-2 h-4 w-4" />
+                <Trash2 className="text-red-600 mr-2 size-4" />
                 <span className="text-red-600">Delete Bot</span>
               </DropdownMenuItem>
             </DropdownMenuSubContent>
@@ -114,7 +114,7 @@ export default function Botselect({ AiParas, selectedAiPara }: BotselectProps) {
         </DropdownMenuPortal>
       </DropdownMenuSub>
     ));
-  };
+  }
 
   return (
     <div className="flex items-center">
