@@ -36,6 +36,7 @@ export default function Botselect({ AiParas, selectedAiPara }: BotselectProps) {
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
   const aiparas = useStore((state) => state.aiparas);
   const selectedai = useStore((state) => state.selectedai);
+  console.log(selectedai.name);
   //const selectedname = useStore((state) => state.selectedname);
   const setInitialAistate = useStore((state) => state.setInitialAistate);
   const setSelectedai = useStore((state) => state.setSelectedai);

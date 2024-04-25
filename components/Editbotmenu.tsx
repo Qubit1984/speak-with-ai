@@ -92,8 +92,8 @@ export default function EditBotMenu({ aiPara }: EditBotMenuProps) {
         setSelectedai(aipara);
       }, 1000);
 
-      console.log(aipara);
-      console.log("selectedai", selectedai);
+      // console.log(aipara);
+      // console.log("selectedai", selectedai);
     }
     setOpen(false);
   }

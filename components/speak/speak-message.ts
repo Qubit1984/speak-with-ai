@@ -24,7 +24,6 @@ function playNextAudio() {
       };
 
       currentAudioElement.play();
-      // currentAudioElement = null;
     }
   }
 }

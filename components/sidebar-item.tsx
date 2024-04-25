@@ -30,13 +30,9 @@ export function SidebarItem({ index, chat, children }: SidebarItemProps) {
   const isActive = pathname === chat.path;
   const [newChatId, setNewChatId] = useLocalStorage("newChatId", null);
   const shouldAnimate = index === 0 && isActive && newChatId;
-  const setSelectedai = useStore((state) => state.setSelectedai);
-  //console.log("sidebar item", chat);
+
   if (!chat?.id) return null;
 
-  /*   function handleClick() {
-    setSelectedai(chat.ai_paras);
-  } */
   return (
     <motion.div
       className="relative h-8"

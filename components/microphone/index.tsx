@@ -125,7 +125,7 @@ export default function Microphone({ onVoiceChange }: MicrophoneProps) {
         setLoading(false);
       }
     }
-  }, [add, microphone, userMedia, apiKey]);
+  }, [add, microphone, userMedia, apiKey, selectedai.listen_language]);
 
   useEffect(() => {
     if (!apiKey) {

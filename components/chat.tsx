@@ -29,7 +29,6 @@ export function Chat({ id, aiName, user, missingKeys, className }: ChatProps) {
   const [messages] = useUIState();
   const [aiState] = useAIState();
 
-  const setSelectedName = useStore((state) => state.setSelectedName);
   const [_, setNewChatId] = useLocalStorage("newChatId", id);
   //console.log("id", id);
 
@@ -41,11 +40,6 @@ export function Chat({ id, aiName, user, missingKeys, className }: ChatProps) {
     }
   }, [id, path, user, messages]);
 
-  useEffect(() => {
-    if (aiName) {
-      setSelectedName(aiName);
-    }
-  }, [aiName]);
   useEffect(() => {
     const messagesLength = aiState.messages?.length;
     if (messagesLength === 2) {
