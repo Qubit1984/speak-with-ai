@@ -37,7 +37,7 @@ export function BotMessage({
   const selectedai = useStore((state) => state.selectedai);
 
   const [text, isComplete] = useStreamableText(content) as [string, boolean];
-  if (isComplete && isComplete && selectedai.should_speak) {
+  if (isComplete && selectedai.should_speak) {
     speakMessage(text, selectedai.speak_language);
   }
   return (
